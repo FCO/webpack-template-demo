@@ -1,0 +1,7 @@
+[% bla %]
+[% INCLUDE "1.html.tt" %]
+[% INCLUDE "2.html.tt" %]
+[% INCLUDE "3.html.tt" %]
+[% INCLUDE "4.html.tt" %]
+[% INCLUDE "5.html.tt" %]
+ooo

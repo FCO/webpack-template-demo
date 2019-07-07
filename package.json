@@ -1,0 +1,33 @@
+{
+  "name": "test-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:all",
+    "build:all": "webpack --env.country 'uk za ca'",
+    "build:uk":  "webpack --env.country uk",
+    "build:za":  "webpack --env.country za",
+    "build:ca":  "webpack --env.country ca",
+    "start":     "npm run start:all",
+    "start:all": "webpack-dev-server --cache=false --live-reload=true --env.country 'uk za ca'",
+    "start:uk":  "webpack-dev-server --cache=false --live-reload=true --env.country uk",
+    "start:ca":  "webpack-dev-server --cache=false --live-reload=true --env.country ca",
+    "start:za":  "webpack-dev-server --cache=false --live-reload=true --env.country za",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.0.3",
+    "extra-watch-webpack-plugin": "^1.0.3",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "copy": "^0.3.2",
+    "event-hooks-webpack-plugin": "^2.1.2",
+    "mkdir-p": "0.0.7"
+  }
+}
