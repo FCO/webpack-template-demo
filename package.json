@@ -4,16 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clear": "rm -rf compiled dist tt",
     "build": "npm run build:all",
-    "build:all": "webpack --env.country 'uk za ca'",
-    "build:uk":  "webpack --env.country uk",
-    "build:za":  "webpack --env.country za",
-    "build:ca":  "webpack --env.country ca",
-    "start":     "npm run start:all",
-    "start:all": "webpack-dev-server --cache=false --live-reload=true --env.country 'uk za ca'",
-    "start:uk":  "webpack-dev-server --cache=false --live-reload=true --env.country uk",
-    "start:ca":  "webpack-dev-server --cache=false --live-reload=true --env.country ca",
-    "start:za":  "webpack-dev-server --cache=false --live-reload=true --env.country za",
+    "build:uk": "webpack --env.country uk",
+    "build:za": "webpack --env.country za",
+    "build:ca": "webpack --env.country ca",
+    "start": "npm run start:za",
+    "start:uk": "webpack-dev-server --live-reload=true --env.country uk",
+    "start:ca": "webpack-dev-server --live-reload=true --env.country ca",
+    "start:za": "webpack-dev-server --live-reload=true --env.country za",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -21,6 +20,8 @@
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.3",
     "extra-watch-webpack-plugin": "^1.0.3",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.35.2",
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.7.2"

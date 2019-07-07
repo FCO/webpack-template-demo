@@ -1,3 +1,3 @@
 import bar from './bar'
 
-console.log(bar())
+export default () => console.log(bar())
