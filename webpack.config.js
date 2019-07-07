@@ -34,7 +34,6 @@ class CopyBeforeRun {
 }
 
 module.exports = env => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! AQUI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     let country = env.country || "za"
 
     console.log(`Generating countries: ${country}`)
@@ -71,9 +70,9 @@ module.exports = env => {
             ]
         },
         plugins: [
-            new ExtraWatchPlugin({
-                files: './pages.json'
-            }),
+			//new ExtraWatchPlugin({
+            //    files: './pages.json'
+            //}),
             new CopyBeforeRun(
                 [
                     `src/tt/common/**/*`,
@@ -83,7 +82,10 @@ module.exports = env => {
             ),
             ...Object.values(ttEntry).map(item =>
                 new HtmlWebpackPlugin({
-                    template: item.template
+					template: item.template,
+					filename: item.filename,
+					files:    item.files,
+					inject:   "body",
                 })
             ),
         ],
@@ -94,7 +96,7 @@ module.exports = env => {
             },
             {}
         ),
-        output: {
+		output: {
             path: path.resolve(__dirname, `dist/${country}`),
             filename: '[name]-bundle.js'
         },

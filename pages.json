@@ -1,13 +1,36 @@
 {
     "index": {
         "template": "./src/tt/common/index.html.tt",
+		"filename": "index.html",
+		"files": {
+			"js": [
+				"index-bundle.js"
+			]
+		},
         "vars":     {
             "bla": "test",
             "people": [
-                { "first_name": "Fernando", "last_name": "Correa"   },
-                { "first_name": "Aline",    "last_name": "Anjos"    },
-                { "first_name": "Fernanda", "last_name": "Oliveira" },
-                { "first_name": "Sophia",   "last_name": "Oliveira" }
+                { "first_name": "Fernando", "last_name": "Correa de Oliveira"   },
+                { "first_name": "Aline",    "last_name": "dos Anjos"    },
+                { "first_name": "Fernanda", "last_name": "dos Anjos Correa de Oliveira" },
+                { "first_name": "Sophia",   "last_name": "dos Anjos Correa de Oliveira" }
+            ]
+        }
+    },
+    "other": {
+        "template": "./src/tt/common/other.html.tt",
+		"filename": "other.html",
+		"files": {
+			"js": [
+				"other-bundle.js"
+			]
+		},
+        "vars":     {
+            "people": [
+                { "first_name": "Fernando", "last_name": "Correa de Oliveira"   },
+                { "first_name": "Aline",    "last_name": "dos Anjos"    },
+                { "first_name": "Fernanda", "last_name": "dos Anjos Correa de Oliveira" },
+                { "first_name": "Sophia",   "last_name": "dos Anjos Correa de Oliveira" }
             ]
         }
     }
