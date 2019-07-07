@@ -1,13 +1,7 @@
-const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
-const copy  = require('copy')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtraWatchPlugin = require('extra-watch-webpack-plugin')
 const path  = require('path')
-const fs    = require('fs')
-const exec  = require('child_process').exec
-const mkdir = require('mkdir-p')
-
-function execute(command, callback){
-    exec(command, function(error, stdout, stderr){ callback(stdout) })
-}
+const copy  = require('copy')
 
 class CopyBeforeRun {
     constructor(from, to) {
@@ -39,95 +33,71 @@ class CopyBeforeRun {
     }
 }
 
-class TT {
-    constructor(opts) {
-        this.entry          = opts.entry
-        this.output         = opts.output
-        this.vars           = opts.vars || []
-        this.includePath    = opts.includePath
-    }
-    generateCli() {
-        let defines = Object.keys(this.vars).map(key => `--define ${key}=${this.vars[key]}`).join(" ")
-        return `tpage ${defines}` + ( this.includePath != null ? ` --include_path ${this.includePath}` : "" ) + ` ${ this.entry }`
-    }
-    apply(compiler) {
-        compiler.hooks.emit.tapAsync('AfterEmitPlugin', (compiler, done) => {
-            console.log(`Compiling ${this.entry}: ${ this.generateCli() }`)
-            execute(this.generateCli(), html => {
-                console.log(`Compiled ${this.entry} generated (${ this.output }):`, html)
-                mkdir(path.dirname(this.output), err => {
-                    if(err) {
-                        console.error(err);
-                        done(err)
-                    }
-                    fs.open(this.output, 'w', (err, file) => {
-                        if(err) {
-                            console.error(err);
-                            done(err)
-                        }
-                        console.log(`Writing ${ this.output }`)
-                        fs.write(file, html, done)
-                    })
-                })
-            })
-        })
-    }
-}
-
 module.exports = env => {
-    env = env || {country: "uk za ca"}
-    let countries = env.country.split(/\s+/)
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! AQUI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    let country = env.country || "za"
 
-    console.log(`Generating countries: ${countries}`)
+    console.log(`Generating countries: ${country}`)
 
-    let jsEntry = {
-            index: `./compiled/${countries[0]}/js/index.js`,
-    }
-
-    let generated = [];
-
-    [ 'js',  'tt' ].forEach( type => {
-        countries.forEach( country => {
-            generated.push(
-                new CopyBeforeRun(
-                    [
-                        `src/${type}/common/**/*`,
-                        `src/${type}/${country}/**/*`
-                    ],
-                    `compiled/${country}/${type}/`
-                )
-            )
-        })
-    })
-
-    let genHtml = countries
-        .map(country => new TT({
-            vars:           { "bla": "test" },
-            includePath:    `compiled/${country}/tt`,
-            entry:          `compiled/${country}/tt/index.html.tt`,
-            output:         `dist/${country}/html/index.html`,
-        }))
+    let ttEntry = require("./pages.json")
 
     return {
+        module: {
+            rules: [
+                {
+                    test: /\.tt$/,
+                    use: [
+                        {
+                            loader: 'html-loader',
+                        },
+                        {
+                            loader: path.resolve('tt-loader.js'),
+                            options: {
+                                vars: Object.values(ttEntry).reduce(
+                                    (agg, item) => {
+                                        agg[path.resolve(item.template)] = item.vars;
+                                        return agg
+                                    },
+                                    {}
+                                ),
+                                includePath:    [
+                                    `src/tt/${country}`,
+                                    `src/tt/common`,
+                                ],
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
         plugins: [
-            ...generated,
-            ...genHtml,
-            new ExtraWatchWebpackPlugin({ files: [ 'src/tt/**' ] }),
+            new ExtraWatchPlugin({
+                files: './pages.json'
+            }),
+            new CopyBeforeRun(
+                [
+                    `src/tt/common/**/*`,
+                    `src/tt/${country}/**/*`
+                ],
+                `tt/${country}`
+            ),
+            ...Object.values(ttEntry).map(item =>
+                new HtmlWebpackPlugin({
+                    template: item.template
+                })
+            ),
         ],
-        entry: jsEntry,
+        entry: Object.keys(ttEntry).reduce(
+            (agg, key) => {
+                agg[key] = path.resolve(ttEntry[key].template);
+                return agg
+            },
+            {}
+        ),
         output: {
-            path: path.resolve(__dirname, `dist/${countries[0]}/js`),
+            path: path.resolve(__dirname, `dist/${country}`),
             filename: '[name]-bundle.js'
         },
         mode: "development",
-        //watch: true,
-        watchOptions: {
-            ignored: ['dist/**', 'compiled/**', 'node_modules/**']
-        },
-        devServer: {
-            contentBase: path.join(__dirname, `dist/${countries[0]}/html`),
-            compress: true,
-            port: 9000
-        },
     }
 }

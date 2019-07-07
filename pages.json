@@ -1,0 +1,14 @@
+{
+    "index": {
+        "template": "./src/tt/common/index.html.tt",
+        "vars":     {
+            "bla": "test",
+            "people": [
+                { "first_name": "Fernando", "last_name": "Correa"   },
+                { "first_name": "Aline",    "last_name": "Anjos"    },
+                { "first_name": "Fernanda", "last_name": "Oliveira" },
+                { "first_name": "Sophia",   "last_name": "Oliveira" }
+            ]
+        }
+    }
+}

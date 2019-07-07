@@ -1,6 +1,16 @@
-[% bla %]
+bla: [% bla %]!!!
 [% INCLUDE "1.html.tt" %]
 [% INCLUDE "2.html.tt" %]
 [% INCLUDE "3.html.tt" %]
 [% INCLUDE "4.html.tt" %]
 [% INCLUDE "5.html.tt" %]
+<table border=1>
+[% FOREACH person IN people %]
+    <tr>
+        <td>first name</td>
+        <td>[% person.first_name %]</td>
+        <td>last name</td>
+        <td>[% person.last_name %]</td>
+    </tr>
+[% END %]
+</table>
