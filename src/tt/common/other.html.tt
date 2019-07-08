@@ -1,0 +1,10 @@
+<table border=1>
+[% FOREACH person IN people %]
+    <tr>
+        <td>first name</td>
+        <td>[% person.first_name %]</td>
+        <td>last name</td>
+        <td>[% person.last_name %]</td>
+    </tr>
+[% END %]
+</table>
